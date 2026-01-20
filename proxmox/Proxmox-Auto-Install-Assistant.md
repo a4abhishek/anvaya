@@ -11,12 +11,14 @@ apt install proxmox-auto-install-assistant
 ```
 
 **Alternate method (without Proxmox repo configured):**
+
 ```bash
 wget http://download.proxmox.com/debian/pve/dists/bookworm/pvetest/binary-amd64/proxmox-auto-install-assistant_8.4.6_amd64.deb
 sudo dpkg -i proxmox-auto-install-assistant_8.4.6_amd64.deb
 ```
 
 **System Requirements:**
+
 - glibc 2.36+ (Debian 12 Bookworm / Ubuntu 24.04+)
 - **xorriso** (CRITICAL - not a declared dependency, must install manually)
 
@@ -29,6 +31,7 @@ sudo apt-get install -y xorriso
 ```
 
 **Failure without xorriso:**
+
 ```
 Error: Could not find the 'xorriso' binary. Please install it.
 ```
@@ -48,6 +51,8 @@ proxmox-auto-install-assistant prepare-iso \
 **Important:** The argument is `--output`, NOT `--output-file` (some documentation examples are incorrect).
 
 ### Answer File Format (TOML)
+
+For a detailed breakdown of all parameters, see the **[Answer File Explained](Answer-File-Explained.md)** guide.
 
 ```toml
 [global]
@@ -107,6 +112,7 @@ Answer file requires SHA-512 hashed passwords (`openssl passwd -6`). Plaintext c
 ### 5. Device vs Partition
 
 `dd` target must be disk device (`/dev/sdX`), not partition (`/dev/sdX1`). Verify with:
+
 ```bash
 lsblk -dno TYPE /dev/sdX  # Must output: disk
 ```
@@ -114,6 +120,7 @@ lsblk -dno TYPE /dev/sdX  # Must output: disk
 ### 6. Mounted Partitions
 
 Unmount all partitions on target device before `dd`:
+
 ```bash
 sudo umount /dev/sdX* 2>/dev/null || true
 ```
@@ -121,6 +128,7 @@ sudo umount /dev/sdX* 2>/dev/null || true
 ### 7. TOML Array Syntax
 
 SSH keys must be an array, even for single key:
+
 ```toml
 root_ssh_keys = ["key1"]  # Correct
 root_ssh_keys = "key1"    # Wrong
@@ -129,6 +137,7 @@ root_ssh_keys = "key1"    # Wrong
 ### 8. Filter Format
 
 Filters must be TOML subsections, not strings:
+
 ```toml
 # WRONG
 filter = ".*"
